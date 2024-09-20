@@ -1,6 +1,6 @@
 FROM alpine:latest
 WORKDIR /app
-COPY ./backend/myapp .
+COPY ./backend/backend/myapp .
 RUN apk add --no-cache shadow && groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
 EXPOSE 8080
 USER appuser
