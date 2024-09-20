@@ -1,7 +1,7 @@
-FROM 1.19-alpine
+FROM alpine-latest
 WORKDIR /app
 COPY ./backend/myapp .
-RUN groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
+RUN apk add --no-cache shadow && groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
 EXPOSE 8080
 USER appuser
 ENV DB_HOST=172.17.0.2 \
