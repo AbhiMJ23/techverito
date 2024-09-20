@@ -1,4 +1,4 @@
-FROM alpine-latest
+FROM alpine:latest
 WORKDIR /app
 COPY ./backend/myapp .
 RUN apk add --no-cache shadow && groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
