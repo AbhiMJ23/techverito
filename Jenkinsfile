@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     tools {
-       nodejs 'node:14.17'
+       nodejs 'node14.17'
     }
  
     environment {
@@ -40,7 +40,7 @@ pipeline {
                  
         stage('Docker Image build and Push') {
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub-cred') {
+                withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/') {
                  sh ''' docker build -t abhimj23/techverito-frontend:$BUILD_NUMBER .
                         docker push abhimj23/techverito-frontend:$BUILD_NUMBER
                }
@@ -58,8 +58,8 @@ pipeline {
                 label 'backend'
             }
             steps {
-                    withDockerRegistry(credentialsId: 'dockerhub-cred') {                     
-                       sh 'docker run -d -p 3000:3000 --name frontend:$BUILD_NUMBER abhimj23/techverito-frontend:$BUILD_NUMBER '
+                    withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/') {                     
+                       sh 'docker run -d -p 3000:3000 --name frontend$BUILD_NUMBER abhimj23/techverito-frontend:$BUILD_NUMBER '
                }
             }
         }
