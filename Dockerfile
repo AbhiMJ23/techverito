@@ -1,6 +1,6 @@
 FROM node:14-alpine
 WORKDIR /app
-COPY ./frontend/ ./
+COPY ./frontend/ .
 RUN npm install
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup && chown -R appuser:appgroup /app
 EXPOSE 3000
