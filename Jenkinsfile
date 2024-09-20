@@ -41,7 +41,7 @@ pipeline {
         stage('Docker Image build and Push') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-cred') {
-                 sh ''' docker build -t abhimj23/techverito-frontend:$BUILD_NUMBER -f Dockerfile-Backend .
+                 sh ''' docker build -t abhimj23/techverito-frontend:$BUILD_NUMBER .
                         docker push abhimj23/techverito-frontend:$BUILD_NUMBER
                }
             }
