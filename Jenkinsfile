@@ -3,7 +3,6 @@ pipeline {
     
     tools {
        go 'go:1.19'
-       nodejs 'node:14.17'
     }
  
     environment {
@@ -28,41 +27,32 @@ pipeline {
         
         stage('Trivy File Scan') {
             steps {
-                sh 'trivy fs --format table -o trivy-filescan-report.html . '
+                sh 'trivy fs --format table -o trivy-filescanBackend-report.html . '
             }
         }
         
         stage('Go app build') {
             steps {
                 script{
-                    sh ''' go mod download
-                           go build -o /myapp '''
+                    sh '''cd backend 
+                          go mod download
+                          go build -o /myapp '''
                 }
-            }
-        }
-        
-        stage('NPM Package install') {
-            steps {
-               sh 'npm install'
             }
         }
                  
         stage('Docker Image build and Push') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-cred') {
-                 sh ''' docker build -t abhimj23/techverito-backend:01 -f Dockerfile-Backend .
-                        docker push abhimj23/techverito-backend:01
-                       
-                        docker build -t abhimj23/techverito-frontend:01 -f Dockerfile-Frontend .
-                        docker push abhimj23/techverito-frontend:01  '''
+                 sh ''' docker build -t abhimj23/techverito-backend:$BUILD_NUMBER .
+                        docker push abhimj23/techverito-backend:$BUILD_NUMBER
                }
             }
         }
         
         stage('Trivy Image Scan') {
             steps {
-                sh '''trivy image --format table -o trivy-backendimage-scan-report.html abhimj23/techverito-backend:01
-                      trivy image --format table -o trivy-frontendimage-scan-report.html abhimj23/techverito-frontend:01 '''
+                sh '''trivy image --format table -o trivy-backendimage-scan-report.html abhimj23/techverito-backend:$BUILD_NUMBER '''
             }
         }
         stage('Container Deployment Backend') {
@@ -71,21 +61,9 @@ pipeline {
             }
             steps {
                     withDockerRegistry(credentialsId: 'dockerhub-cred') {                       
-                       sh 'docker run -d -p 8080:8080 --name backend abhimj23/techverito-backend:01 '
+                       sh 'docker run -d -p 8080:8080 --name backend:$BUILD_NUMBER abhimj23/techverito-backend:$BUILD_NUMBER '
                }
             }
-        }
-        
-        stage('Container Deployment Frontend') {
-            agent{
-                label 'backend'
-            }
-            steps {
-                    withDockerRegistry(credentialsId: 'dockerhub-cred') {                     
-                       sh 'docker run -d -p 3000:3000 --name frontend abhimj23/techverito-frontend:01 '
-               }
-            }
-        }
-        
+        }       
     }
 }
