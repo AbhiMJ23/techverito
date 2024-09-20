@@ -20,7 +20,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonar-server') {
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=techverito -Dsonar.projectKey=techverito
-                               -Dsonar.project.sources=. '''
+                               -Dsonar.sources=. '''
                 }
             }
         }
