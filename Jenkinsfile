@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     tools {
-       go 'go:1.19'
+       go 'go1.19'
     }
  
     environment {
@@ -18,7 +18,7 @@ pipeline {
         
         stage('Sonarqube Analysis') {
             steps {
-                withSonarQubeEnv {
+                withSonarQubeEnv('sonar-server') {
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=techverito -Dsonar.projectKey=techverito
                                -Dsonar.project.sources=. '''
                 }
@@ -43,7 +43,7 @@ pipeline {
                  
         stage('Docker Image build and Push') {
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub-cred') {
+                withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/') {
                  sh ''' docker build -t abhimj23/techverito-backend:$BUILD_NUMBER .
                         docker push abhimj23/techverito-backend:$BUILD_NUMBER
                }
@@ -60,7 +60,7 @@ pipeline {
                 label 'backend'
             }
             steps {
-                    withDockerRegistry(credentialsId: 'dockerhub-cred') {                       
+                    withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/') {                       
                        sh 'docker run -d -p 8080:8080 --name backend:$BUILD_NUMBER abhimj23/techverito-backend:$BUILD_NUMBER '
                }
             }
