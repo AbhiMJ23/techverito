@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/AbhiMJ23/techverito.git'
+                git branch: 'backend', changelog: false, poll: false, url: 'https://github.com/AbhiMJ23/techverito.git'
             }
         }
         
