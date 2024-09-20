@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.19-slim
 WORKDIR /app
 COPY ./backend/myapp .
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
