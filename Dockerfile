@@ -1,4 +1,4 @@
-FROM golang:1.19-alpine
+FROM golang:1.19
 WORKDIR /app
 COPY ./backend/myapp .
 RUN apk add --no-cache shadow && groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
