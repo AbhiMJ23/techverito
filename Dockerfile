@@ -1,4 +1,4 @@
-FROM alpine:latest 
+FROM 1.19-alpine
 WORKDIR /app
 COPY ./backend/myapp .
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser && chown -R appuser:appgroup /app
