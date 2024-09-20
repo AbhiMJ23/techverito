@@ -49,7 +49,7 @@ pipeline {
         
         stage('Trivy Image Scan') {
             steps {
-                sh 'trivy image --format table -o trivy-frontendimage-scan-report.html abhimj23/techverito-frontend:$BUILD_NUMBER'
+                sh 'trivy image --format table -o trivy-frontendimage-scan-report$BUILD_NUMBER.html abhimj23/techverito-frontend:$BUILD_NUMBER'
             }
         }
        
